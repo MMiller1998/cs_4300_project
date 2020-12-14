@@ -208,7 +208,7 @@ function addBlurbs(scene) {
     const fontLoader = new THREE.FontLoader();
     const textColor = 0x000000;
 
-    const welcomeBlurb = "Welcome to the museum! All information on the \nart is sourced from Wikipedia. Enjoy the exhibit!\n\nControls:\nMove forward: W, up, or left click\nMove backward: S, down, or right click\nRotate camera left/right: A and D or left/right click\nMove left/right: Q and E"
+    const welcomeBlurb = "Welcome to the museum! Enjoy the exhibit!\n\nControls:\nMove forward: W, up, or left click\nMove backward: S, down, or right click\nRotate camera left/right: A and D or left/right click\nMove up/down: space and shift\nMove left/right: Q and E"
     const guernicaBlurb = "Guernica \nArtist: Pablo Picasso \nGuernica is one of Picasso's best \nknown works, regarded by many \nart critics as the most moving and \npowerful anti-war painting in history. \nIt is exhibited in the Museo Reina \nSofia in Madrid. "
     const sunflowerBlurb = "Sunflowers 14\nArtist: Gina De Gorna\nThis one isn't famous, so \nthere's no wikipedia entry :("
     const modernArtBlurb = "Mobioid\nArtist: Matthew Miller\nAn original piece of modern art, this is a para-\nmaterized surface based on the equation for \na mobius strip."

@@ -20,8 +20,8 @@ var FirstPersonControls = function ( object, domElement ) {
 
 	this.enabled = true;
 
-	this.movementSpeed = 2.5;
-	this.lookSpeed = 100.0;
+	this.movementSpeed = 1.5;
+	this.lookSpeed = 80.0;
 
 	this.lookVertical = true;
 	this.autoForward = false;
@@ -279,7 +279,7 @@ var FirstPersonControls = function ( object, domElement ) {
 			} else if ( this.lookLeft ) {
 				lon -= -1 * actualLookSpeed;
 			} else if ( this.mouseDragOn ) {
-				lon -= this.mouseX * actualLookSpeed / 300;
+				lon -= this.mouseX * actualLookSpeed / 500;
 			}
 			if ( this.lookVertical ) lat -= this.moudseY * actualLookSpeed * verticalLookRatio;
 

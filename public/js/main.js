@@ -12,7 +12,6 @@ document.body.appendChild( renderer.domElement );
 camera.position.z = 2;
 camera.position.y = .8
 camera.rotateY(Math.PI)
-// camera.rotateX(Math.PI / 30)
 
 const controls = new FirstPersonControls(camera, renderer.domElement);
 controls.lookVertical = false;
