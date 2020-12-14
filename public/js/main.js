@@ -9,8 +9,10 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-camera.position.z = 3;
-camera.position.y = .7
+camera.position.z = 2;
+camera.position.y = .8
+camera.rotateY(Math.PI)
+// camera.rotateX(Math.PI / 30)
 
 const controls = new FirstPersonControls(camera, renderer.domElement);
 controls.lookVertical = false;

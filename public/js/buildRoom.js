@@ -5,6 +5,8 @@ import {MtlObjBridge} from './three.js-master/examples/jsm/loaders/obj2/bridge/M
 const wallHeight = 3;
 const shortWallLength = 8;
 const longWallLength = 13;
+const wallColor = 0xad9b7c;
+const floorColor = 0xffffff;
 
 const wireWidth = .01;
 const wireLength = .5;
@@ -17,6 +19,7 @@ function buildRoom(scene) {
     addPaintings(scene);
     addStatues(scene);
     addModernArt(scene);
+    addBlurbs(scene);
     addLights(scene);
 }
 
@@ -26,10 +29,10 @@ function addWalls(scene) {
     const floorGeometry = new THREE.PlaneGeometry( longWallLength, shortWallLength)
     const pillarGeometry = new THREE.BoxGeometry(shortWallLength / 4, wallHeight, shortWallLength / 4);
     
-	const longWallMaterial = new THREE.MeshPhongMaterial( {color: 0xC0C0C0, side: THREE.DoubleSide} );
-	const shortWallMaterial = new THREE.MeshPhongMaterial( {color: 0xFF0000, side: THREE.DoubleSide} );
-	const floorMaterial = new THREE.MeshPhongMaterial( {color: 0x00FF00, side: THREE.DoubleSide} );
-	const pillarMaterial = new THREE.MeshPhongMaterial( { color: 0x00ffff, side: THREE.DoubleSide } );
+	const longWallMaterial = new THREE.MeshPhongMaterial( {color: wallColor, side: THREE.DoubleSide} );
+	const shortWallMaterial = new THREE.MeshPhongMaterial( {color: wallColor, side: THREE.DoubleSide} );
+	const floorMaterial = new THREE.MeshPhongMaterial( {color: floorColor, side: THREE.DoubleSide} );
+	const pillarMaterial = new THREE.MeshPhongMaterial( { color: wallColor, side: THREE.DoubleSide } );
 
 	const farWall = new THREE.Mesh( shortWallGeometry, shortWallMaterial );
 	farWall.translateY(wallHeight / 2);
@@ -76,19 +79,18 @@ function addPaintings(scene) {
     const paintingGeometry = new THREE.PlaneGeometry(2, 2);
     const paintingGeometry2 = new THREE.PlaneGeometry(5, 2.5);
 
-    const paintingMaterial = new THREE.MeshBasicMaterial( {color: 0x0000FF, side: THREE.DoubleSide} );
     const sunflowersMaterial = new THREE.MeshPhongMaterial({map: textureLoader.load('resources/sunflowers.jpg'), side: THREE.DoubleSide})
     const guernicaMaterial = new THREE.MeshPhongMaterial({map: textureLoader.load('resources/guernica.jpg'), side: THREE.DoubleSide})
 
     const painting1 = new THREE.Mesh(paintingGeometry, sunflowersMaterial);
     painting1.translateX(shortWallLength / -2 + .01)
-    painting1.translateZ(longWallLength / -3);
+    painting1.translateZ(longWallLength / -2.5);
     painting1.translateY(1.5);
     painting1.rotateY(Math.PI / 2);
 
     const painting2 = new THREE.Mesh(paintingGeometry2, guernicaMaterial);
     painting2.translateX(shortWallLength / -2 + .01)
-    painting2.translateZ(longWallLength / 5);
+    painting2.translateZ(longWallLength / 13);
     painting2.translateY(1.5)
     painting2.rotateY(Math.PI / 2);
 
@@ -177,7 +179,7 @@ function addModernArt(scene) {
     const sculptureStandGeometry = new THREE.BoxGeometry(standX, standY, standZ);
 
     const sculptureMaterial = new THREE.MeshStandardMaterial( {color: 0x5ccece, side: THREE.DoubleSide, metalness: 1.0, roughness: .5, emissive: 0x534b6c });
-    const sculptureStandMaterial = new THREE.MeshPhongMaterial( {color: 0xa0a0a0} );
+    const sculptureStandMaterial = new THREE.MeshPhongMaterial( {color: 0x909090} );
 
     const sculptureMesh = new THREE.Mesh(sculptureGeometry, sculptureMaterial);
     sculptureMesh.scale.set(.1, .2, .1)
@@ -202,10 +204,103 @@ function addModernArt(scene) {
     scene.add(sculptureAndStand);
 }
 
+function addBlurbs(scene) {
+    const fontLoader = new THREE.FontLoader();
+    const textColor = 0x000000;
+
+    const welcomeBlurb = "Welcome to the museum! All information on the \nart is sourced from Wikipedia. Enjoy the exhibit!\n\nControls:\nMove forward: W, up, or left click\nMove backward: S, down, or right click\nRotate camera left/right: A and D or left/right click\nMove left/right: Q and E"
+    const guernicaBlurb = "Guernica \nArtist: Pablo Picasso \nGuernica is one of Picasso's best \nknown works, regarded by many \nart critics as the most moving and \npowerful anti-war painting in history. \nIt is exhibited in the Museo Reina \nSofia in Madrid. "
+    const sunflowerBlurb = "Sunflowers 14\nArtist: Gina De Gorna\nThis one isn't famous, so \nthere's no wikipedia entry :("
+    const modernArtBlurb = "Mobioid\nArtist: Matthew Miller\nAn original piece of modern art, this is a para-\nmaterized surface based on the equation for \na mobius strip."
+    const davidBlurb = "David\nArtist: Michelangelo\nDavid is a masterpiece of Renaissance \nsculpture created in marble between 1501 \nand 1504. It is a marble statue of the \nBiblical figure David, a favoured subject \nin the art of Florence. "
+    const statueTwoBlurb = "Thai Sandstone Female\nArtist: Hane3D\nThai statue of a female. The Sandstone \nmaterial makes this statue light and rel-\natively fragile. This is actually the count-\nerpart of another Thai sandstone statue."
+
+    fontLoader.load('js/three.js-master/examples/fonts/helvetiker_regular.typeface.json', function (response) {
+        addWelcomeBlurb(response);
+        addGuernicaBlurb(response);
+        addSunflowerBlurb(response);
+        addModernArtBlurb(response);
+        addDavidBlurb(response);
+        addStatueTwoBlurb(response);
+    })
+    
+    function addWelcomeBlurb(font) {
+        const welcomeBlurbGeometry = new THREE.TextGeometry(welcomeBlurb, {font: font, size: .08, height: .001});
+        const welcomeBlurbMaterial = new THREE.MeshBasicMaterial({color: textColor});
+        const welcomeBlurbMesh = new THREE.Mesh(welcomeBlurbGeometry, welcomeBlurbMaterial);
+    
+        welcomeBlurbMesh.translateY(1.75);
+        welcomeBlurbMesh.translateX(1);
+        welcomeBlurbMesh.translateZ(longWallLength / 2 - .01);
+        welcomeBlurbMesh.rotateY(Math.PI);
+    
+        scene.add(welcomeBlurbMesh);
+    }
+    function addGuernicaBlurb(font) {
+        const guernicaBlurbGeometry = new THREE.TextGeometry(guernicaBlurb, {font: font, size: .08, height: .001});
+        const guernicaBlurbMaterial = new THREE.MeshBasicMaterial({color: textColor});
+        const guernicaBlurbMesh = new THREE.Mesh(guernicaBlurbGeometry, guernicaBlurbMaterial);
+    
+        guernicaBlurbMesh.translateY(1.75);
+        guernicaBlurbMesh.translateX(shortWallLength / -2 + .01);
+        guernicaBlurbMesh.translateZ(5.8);
+        guernicaBlurbMesh.rotateY(Math.PI / 2);
+    
+        scene.add(guernicaBlurbMesh);
+    }
+    function addSunflowerBlurb(font) {
+        const sunflowerBlurbGeometry = new THREE.TextGeometry(sunflowerBlurb, {font: font, size: .08, height: .001});
+        const sunflowerBlurbMaterial = new THREE.MeshBasicMaterial({color: textColor});
+        const sunflowerBlurbMesh = new THREE.Mesh(sunflowerBlurbGeometry, sunflowerBlurbMaterial);
+    
+        sunflowerBlurbMesh.translateY(1.75);
+        sunflowerBlurbMesh.translateX(shortWallLength / -2 + .01);
+        sunflowerBlurbMesh.translateZ(-2.5)
+        sunflowerBlurbMesh.rotateY(Math.PI / 2);
+    
+        scene.add(sunflowerBlurbMesh);
+    }
+    function addModernArtBlurb(font) {
+        const modernArtBlurbGeometry = new THREE.TextGeometry(modernArtBlurb, {font: font, size: .08, height: .001});
+        const modernArtBlurbMaterial = new THREE.MeshBasicMaterial({color: textColor});
+        const modernArtBlurbMesh = new THREE.Mesh(modernArtBlurbGeometry, modernArtBlurbMaterial);
+    
+        modernArtBlurbMesh.translateY(1.75);
+        modernArtBlurbMesh.translateX(.8);
+        modernArtBlurbMesh.translateZ(longWallLength / -2 + .01);
+    
+        scene.add(modernArtBlurbMesh);
+    }
+    function addDavidBlurb(font) {
+        const davidBlurbGeometry = new THREE.TextGeometry(davidBlurb, {font: font, size: .08, height: .001});
+        const davidBlurbMaterial = new THREE.MeshBasicMaterial({color: textColor});
+        const davidBlurbMesh = new THREE.Mesh(davidBlurbGeometry, davidBlurbMaterial);
+    
+        davidBlurbMesh.translateY(1.75);
+        davidBlurbMesh.translateX(shortWallLength / 2 - .01);
+        davidBlurbMesh.translateZ(-2)
+        davidBlurbMesh.rotateY(Math.PI / -2);
+    
+        scene.add(davidBlurbMesh);
+    }
+    function addStatueTwoBlurb(font) {
+        const statueTwoBlurbGeometry = new THREE.TextGeometry(statueTwoBlurb, {font: font, size: .08, height: .001});
+        const statueTwoBlurbMaterial = new THREE.MeshBasicMaterial({color: textColor});
+        const statueTwoBlurbMesh = new THREE.Mesh(statueTwoBlurbGeometry, statueTwoBlurbMaterial);
+    
+        statueTwoBlurbMesh.translateY(1.75);
+        statueTwoBlurbMesh.translateX(shortWallLength / 2 - .01);
+        statueTwoBlurbMesh.translateZ(3.5)
+        statueTwoBlurbMesh.rotateY(Math.PI / -2);
+    
+        scene.add(statueTwoBlurbMesh);
+    }
+}
+
 function addLights(scene) {
     const ambientLight = new THREE.AmbientLight( 0xffffff, .8 ); 
     
-    const pointLight1 = new THREE.PointLight( 0xffffff, .7, 9 );
+    const pointLight1 = new THREE.PointLight( 0xffffff, .7, 11 );
     pointLight1.castShadow = true;
     
     
