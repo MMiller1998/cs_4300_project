@@ -20,8 +20,8 @@ var FirstPersonControls = function ( object, domElement ) {
 
 	this.enabled = true;
 
-	this.movementSpeed = 1.0;
-	this.lookSpeed = 0.005;
+	this.movementSpeed = 2.5;
+	this.lookSpeed = 100.0;
 
 	this.lookVertical = true;
 	this.autoForward = false;
@@ -50,6 +50,8 @@ var FirstPersonControls = function ( object, domElement ) {
 	this.moveBackward = false;
 	this.moveLeft = false;
 	this.moveRight = false;
+	this.lookLeft = false;
+	this.lookRight = false;
 
 	this.viewHalfX = 0;
 	this.viewHalfY = 0;
@@ -161,16 +163,19 @@ var FirstPersonControls = function ( object, domElement ) {
 			case 87: /*W*/ this.moveForward = true; break;
 
 			case 37: /*left*/
-			case 65: /*A*/ this.moveLeft = true; break;
+			case 65: /*A*/ this.lookLeft = true; break;
 
 			case 40: /*down*/
 			case 83: /*S*/ this.moveBackward = true; break;
 
 			case 39: /*right*/
-			case 68: /*D*/ this.moveRight = true; break;
+			case 68: /*D*/ this.lookRight = true; break;
 
-			case 82: /*R*/ this.moveUp = true; break;
-			case 70: /*F*/ this.moveDown = true; break;
+			case 32: /*Space*/ this.moveUp = true; break;
+			case 16: /*Shift*/ this.moveDown = true; break;
+
+			case 81: /*Q*/ this.moveLeft = true; break;
+			case 69: /*E*/ this.moveRight = true; break;
 
 		}
 
@@ -184,17 +189,19 @@ var FirstPersonControls = function ( object, domElement ) {
 			case 87: /*W*/ this.moveForward = false; break;
 
 			case 37: /*left*/
-			case 65: /*A*/ this.moveLeft = false; break;
+			case 65: /*A*/ this.lookLeft = false; break;
 
 			case 40: /*down*/
 			case 83: /*S*/ this.moveBackward = false; break;
 
 			case 39: /*right*/
-			case 68: /*D*/ this.moveRight = false; break;
+			case 68: /*D*/ this.lookRight = false; break;
 
-			case 82: /*R*/ this.moveUp = false; break;
-			case 70: /*F*/ this.moveDown = false; break;
+			case 32: /*Space*/ this.moveUp = false; break;
+			case 16: /*Shift*/ this.moveDown = false; break;
 
+			case 81: /*Q*/ this.moveLeft = false; break;
+			case 69: /*E*/ this.moveRight = false; break;
 		}
 
 	};
@@ -267,8 +274,14 @@ var FirstPersonControls = function ( object, domElement ) {
 
 			}
 
-			lon -= this.mouseX * actualLookSpeed;
-			if ( this.lookVertical ) lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
+			if ( this.lookRight ) {
+				lon -= actualLookSpeed;
+			} else if ( this.lookLeft ) {
+				lon -= -1 * actualLookSpeed;
+			} else if ( this.mouseDragOn ) {
+				lon -= this.mouseX * actualLookSpeed / 300;
+			}
+			if ( this.lookVertical ) lat -= this.moudseY * actualLookSpeed * verticalLookRatio;
 
 			lat = Math.max( - 85, Math.min( 85, lat ) );
 

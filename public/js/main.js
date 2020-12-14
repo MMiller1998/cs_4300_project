@@ -1,30 +1,32 @@
 import {FirstPersonControls} from "./three.js-master/examples/jsm/controls/FirstPersonControls.js"
+import {buildRoom} from "./buildRoom.js";
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 55, window.innerWidth / window.innerHeight, .1, 100 );
 const clock = new THREE.Clock();
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-const cube = new THREE.Mesh( geometry, material );
-scene.add( cube );
-
-const light = new THREE.AmbientLight( 0x404040 ); // soft white light
-scene.add( light );
-
-camera.position.z = 5;
+camera.position.z = 3;
+camera.position.y = .7
 
 const controls = new FirstPersonControls(camera, renderer.domElement);
+controls.lookVertical = false;
 
 function animate() {
-	// cube.rotation.x += 0.01;
-	// cube.rotation.y += 0.01;
+	// tempCube.rotation.x += .02;
+	// tempCube.rotation.y += .02;
 	controls.update(clock.getDelta());
 	requestAnimationFrame( animate );
+	renderer.shadowMap.enabled = true;
 	renderer.render( scene, camera );
 }
+
+buildRoom(scene);
+
+// const tempCube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshPhongMaterial({color: 0x0000ff}));
+// scene.add(tempCube);
+
 animate();
